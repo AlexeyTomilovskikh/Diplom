@@ -1,21 +1,10 @@
+import os
 import requests
 import time
-import os
 import shutil
-import datetime
-
-today = datetime.datetime.today().strftime("%Y-%m-%d-%S")
-my_path = f'C:/{today}/'
-ya_disk_api = input("Введите Ваш Yandex API token: ")
-token = input("Введите Ваш VK token: ")
-
-# with open('token.txt', 'r') as t, open('Ya_disk_api.txt', 'r') as y:
-#     token = t.read().strip()
-#     ya_disk_api = y.read().strip()
-
 
 class Vk_image_saver:
-    def __init__(self, owner_id=None):
+    def __init__(self, token, my_path, owner_id=None):
         self.token = token
         self.url = 'http://api.vk.com/method/'
         self.owner_id = owner_id
@@ -103,11 +92,11 @@ class Vk_image_saver:
 
 
 class Yandex_uploader:
-    def __init__(self):
+    def __init__(self, my_path, ya_disk_api):
         self.headers = {"Authorization": f"OAuth {ya_disk_api}"}
         self.file_path = my_path
 
-    def upload(self, dir_path=None):
+    def upload(self, my_path, dir_path=None):
         if dir_path is None:
             dir_path = self.file_path
         dir_name = dir_path.split('/')[1]
@@ -162,11 +151,3 @@ class Yandex_uploader:
                 complete = f"\nDownload file {dir_name} is complete"
         shutil.rmtree(my_path)
         return print(complete)
-
-
-vk1 = Vk_image_saver()
-vk1.get_albums()
-vk1.get_photo(None, int(input("Введите id альбома: ")))
-vk1.save_photo(int(input("Введите количество файлов для скачивания: ")))
-ya1 = Yandex_uploader()
-ya1.upload()
